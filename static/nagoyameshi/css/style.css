@@ -1,0 +1,284 @@
+/* =========================================
+base.htmlに適用するデザイン
+========================================= */
+
+/* ----- カスタムプロパティ ----- */
+:root{
+    --main-color: #FCF5ED;
+    --sub-color-1: #F4BF96;
+    --sub-color-2: #CE5A67;
+    --accent-color: #1f1717;
+    background-color: var(--main-color)
+}
+:root .btn-primary{
+    background-color: var(--accent-color);
+}
+:root .btn-primary:hover{
+    background-color: var(--sub-color-2);
+}
+:root .btn-secondary{
+    background-color: var(--sub-color-2);
+}
+:root .btn-secondary:hover{
+    background-color: var(--sub-color-1);
+}
+
+/* ----- header ----- */
+header{
+    background-color: var(--sub-color-2);
+    min-height: 70px;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar-brand > img{
+    width:40px;
+    align-items: center;
+}
+.navbar-brand > span{
+    color: var(--main-color);
+    font-size: 2rem;
+    font-family: "Train One", system-ui;
+    font-weight: 500;
+    font-style: normal;
+}
+#search_form{
+    height:100%;
+    padding: 15px 20px 15px 0;
+    display:flex;
+    flex-direction: row;
+}
+#search_form *{
+    margin: 0;
+    border: none;
+}
+#search_form > select{
+    width: 100px;
+    background-color: var(--main-color);
+    border-radius: 10% 0 0 10%;
+    border-right: 2px solid gray;
+}
+#search_form > input[type="text"]{
+    width: 300px;
+    background-color: var(--main-color);
+}
+#search_form > button{
+    background-color: var(--accent-color);
+    color: var(--main-color);
+    border-radius: 0 10% 10% 0;
+}
+#search_form > button:hover{
+    background-color: var(--sub-color-1);
+}
+.header_navigation{
+    height:100%;
+    padding: 7px 20px 7px 0;
+    display:flex;
+    flex-direction: row;
+}
+.header_navigation button{
+    display: inline;
+    height:100%;
+    width: 110px;
+    margin-left: 10px;
+    padding: 15px 0;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    font-size: 1rem;
+    color: var(--main-color);
+    text-align: center;
+}
+.header_navigation > a{
+    display: inline;
+    height:100%;
+    width: 110px;
+    margin-left: 10px;
+    padding: 15px 0;
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 1rem;
+    color: var(--main-color);
+    text-align: center;
+}
+.header_navigation a:hover{
+    color: var(--sub-color-1);
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+.header_navigation button:hover{
+    color: var(--sub-color-1);
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+.header_username:hover{
+    font-size: 1rem;
+    color: var(--main-color);
+    font-weight:lighter;
+}
+
+/* ----- main----- */
+main{
+    background-color: var(--main-color);
+    min-height: 100vh;
+}
+h1{
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: var(--sub-color-2);
+    text-align: center;
+    font-weight: bold;
+}
+.bg_color_main{
+    background-color: var(--main-color);
+}
+
+/* ----- message_area ----- */
+.notify_message_area{
+    position:fixed;
+    width: 100%;
+    top:0;
+    left:0;
+}
+.notify_message{
+    color:white;
+    padding:1rem;
+    margin:1rem;
+    border-radius:0.5rem;
+    display:flex;
+    background:deepskyblue;
+}
+.notify_message_info{
+    background:deepskyblue;
+}
+.notify_message_success{
+    background:forestgreen;
+}
+.notify_message_error{
+    background:crimson;
+}
+.notify_message_content {
+    width:calc(100% - 2rem);
+    font-size:1.25rem;
+}
+.notify_message_delete {
+    cursor:pointer;
+    width:2rem;
+    transition:0.2s;
+}
+.notify_message_delete i{
+    font-size:1.5rem;
+}
+.notify_message_delete:hover{
+    color:black;
+    transition:0.2s;
+}
+
+/* ----- footer ----- */
+footer{
+    background-color: var(--sub-color-1);
+    height: 120px;
+}
+
+/* =========================================
+index.htmlに適用するデザイン
+========================================= */
+#index-carousel .carousel-item{
+    height: 100vh;
+}
+#index-carousel .carousel-item > img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 100vh;
+}
+#index-carousel .carousel-caption{
+    bottom: 0px;
+}
+#index-carousel .carousel_text{
+    font-size: 5rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--sub-color-2);
+    -webkit-text-stroke: 2px var(--main-color);
+    margin: 5rem auto;
+}
+#index-carousel .carousel_btn{
+    font-size: 3rem;
+    margin: 3rem;
+}
+/* =========================================
+top.htmlに適用するデザイン
+========================================= */
+/* .card-body{
+    display: relative;
+    height: 200px;
+} */
+.card-title{
+    font-weight: bold;
+    color: var(--sub-color-2);
+}
+.card:hover{
+    
+    box-shadow: 0.3em 0.3em 1em rgba(31, 23, 23, 0.6);
+}
+
+
+/* =========================================
+mypage.htmlに適用するデザイン
+========================================= */
+.mypage_section > .fa-caret-right{
+    color: var(--sub-color-1);
+}
+.mypage_section > span{
+    font-weight: bold;
+}
+
+
+/* =========================================
+restaurant_detail.htmlに適用するデザイン
+========================================= */
+/* 固定ボタン */
+.btn_fixed{
+    position:fixed;
+    right: 100px;
+    bottom: 30px;
+}
+
+#restaurantDetailCarousel{
+    max-width: 600px;
+    height:28rem;
+}
+.carousel_container{
+    margin-bottom: 8rem;
+}
+#restaurantDetailCarousel .carousel-item > div{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 28rem;
+}
+#restaurantDetailCarousel .carousel-indicators{
+    bottom: -4rem;
+}
+#restaurantDetailCarousel .carousel-indicators > button{
+    width:4rem;
+    height:4rem;
+    border: none;
+    padding: 1px;
+}
+#restaurantDetailCarousel .carousel_img_btn{
+    object-fit:cover;
+    width: 100%;
+    height: 100%;
+}
+
+.star_avg{
+    font-size: 2rem;
+    width: 20rem;
+    height: 2rem;
+}
+  

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %}レビュー投稿フォーム{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'nagoyameshi/css/star_radio.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>{{ restaurant.name }}へのレビュー</h1>
+
+<div class="container">
+<form action="" method="POST" class="my-3">
+    {% csrf_token %}
+
+    <table class="table w-75 mx-auto">
+
+        {# 満足度 #}
+        <tr>
+            <td>満足度</td>
+            <td>
+                {# 星5段階のラジオボタン(非表示) #}
+                <input type="radio" id="star_radio_1" name="number_of_stars" value="1" checked>
+                <input type="radio" id="star_radio_2" name="number_of_stars" value="2">
+                <input type="radio" id="star_radio_3" name="number_of_stars" value="3">
+                <input type="radio" id="star_radio_4" name="number_of_stars" value="4">
+                <input type="radio" id="star_radio_5" name="number_of_stars" value="5">
+
+                {# 星5段階のラベル #}
+                <div class="star_radio_label_area">
+                    <div class="star_radio_label_flex">
+                        <label for="star_radio_5" class="star_radio_label"><div class="true_star text-warning"><i class="fa-solid fa-star"></i></div><div class="false_star text-muted"><i class="fa-solid fa-star"></i></div></label>
+                        <label for="star_radio_4" class="star_radio_label"><div class="true_star text-warning"><i class="fa-solid fa-star"></i></div><div class="false_star text-muted"><i class="fa-solid fa-star"></i></div></label>
+                        <label for="star_radio_3" class="star_radio_label"><div class="true_star text-warning"><i class="fa-solid fa-star"></i></div><div class="false_star text-muted"><i class="fa-solid fa-star"></i></div></label>
+                        <label for="star_radio_2" class="star_radio_label"><div class="true_star text-warning"><i class="fa-solid fa-star"></i></div><div class="false_star text-muted"><i class="fa-solid fa-star"></i></div></label>
+                        <label for="star_radio_1" class="star_radio_label"><div class="true_star text-warning"><i class="fa-solid fa-star"></i></div><div class="false_star text-muted"><i class="fa-solid fa-star"></i></div></label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        {# コメント #}
+        <tr>
+            <td>コメント</td>
+            <td><textarea name="comment" class="w-100"></textarea></td>
+        </tr>
+
+        {# 来店日 #}
+        <tr>
+            <td>来店日</td>
+            <td><input type="date" name="visited_date"  class="flatpicker w-50"></td>
+        </tr>
+
+    </table>
+
+    <input type="submit" class="btn btn-primary btn-lg d-block mx-auto m-4" value="投稿">
+</form>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    flatpickr('.flatpicker', {
+        locale: "ja"
+    });
+</script>
+{% endblock %}

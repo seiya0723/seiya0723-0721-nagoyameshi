@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %}予約フォーム{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'nagoyameshi/css/star_radio.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>{{ restaurant.name }}へのご予約</h1>
+
+<div class="container">
+
+<form action="" method="POST" class="w-50 mx-auto my-3">
+    {% csrf_token %}
+
+    <table class="table">
+        {# 予約日時 #}
+        <tr>
+            <td>ご予約日時</td>
+            <td><input type="datetime-local" name="reservation_datetime" class="flatpicker w-50"></td>
+        </tr>
+        
+        {# 予約人数 #}
+        <tr>
+            <td>人数</td>
+            <td><input type="number" name="number_of_persons" class="w-50"></td>
+        </tr>
+
+        {# コメント #}
+        <tr>
+            <td>共有事項</td>
+            <td><textarea name="comment" class="w-100"></textarea></td>
+        </tr>
+        
+
+    </table>
+
+    <button type="button" data-bs-toggle="modal" data-bs-target="#reservationConfirmModal" class="btn btn-primary btn-lg d-block mx-auto m-4">予約</button>
+                          
+    {# 確認モーダル #}
+    <div class="modal fade" id="reservationConfirmModal" tabindex="-1" aria-labelledby="reservationConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="reservationConfirmModalLabel">予約 </h2>
+                    <button type="button" class="btn text-muted btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-window-close"></i></button>
+                </div>
+                <div class="modal-body">
+                    本当に予約しますか？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    flatpickr('.flatpicker', {
+        locale: "ja",
+        enableTime: true,
+        minDate: 'today'
+    });
+</script>
+{% endblock %}

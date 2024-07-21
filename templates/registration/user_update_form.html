@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% block title %}ユーザー情報変更{% endblock %}
+
+{% block content %}
+<h1>ユーザー情報変更</h1>
+
+<div class="container">
+
+<form action="{% url 'user_update' %}" method="POST" class="w-50 mx-auto">
+    {% csrf_token %}
+
+    <table class="table">
+
+        {# ユーザー名 #}
+        <tr class="">
+            <th>ユーザー名</th>
+            <td>
+                <input type="text" name="username" value="{{ user.username }}">
+            </td>
+        </tr>
+
+        {# メールアドレス #}
+        <tr>
+            <th>メールアドレス <br>※変更不可</th>
+            <td>{{user.email}}</td>
+        </tr>
+
+        {# パスワード #}
+        <tr>
+            <th>パスワード</th>
+            <td><a href="{% url 'password_change' %}">変更フォーム</a></td>
+        </tr>
+
+        {# 氏名（漢字） #}
+        <tr>
+            <th>氏名（漢字）</th>
+            <td>
+                {# 苗字 #}
+                <input type="text" name="last_name" value={{ user.last_name|default:'' }}>
+
+                {# 名前 #}
+                <input type="text" name="first_name" value={{ user.first_name|default:'' }}>
+            </td>
+        </tr>
+
+        {# 氏名（かな） #}
+        <tr>
+            <th>氏名（かな）</th>
+            <td>
+                {# 苗字 #}
+                <input type="text" name="last_name_kana" value={{ user.last_name_kana|default:'' }}>
+
+                {# 名前 #}
+                <input type="text" name="first_name_kana" value={{ user.first_name_kana|default:'' }}>
+            </td>
+        </tr>
+
+        {# 電話番号 #}
+        <tr>
+            <th>電話番号</th>
+            <td>
+                <input type="text" name="phone_number" value={{ user.phone_number|default:'' }}>
+            </td>
+        </tr>
+
+        {# 年齢 #}
+        <tr>
+            <th>年齢</th>
+            <td>
+                <input type="number" name="age" value={{ user.age|default:'' }}>
+            </td>
+        </tr>
+
+    </table>
+    <input type="submit" class="btn btn-primary btn-lg d-block mx-auto m-4" value="保存">
+</form>
+
+</div>
+{% endblock %}

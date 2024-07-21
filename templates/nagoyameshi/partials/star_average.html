@@ -1,0 +1,18 @@
+<div class="star_avg d-flex flex-direction-row align-items-center">
+    {% for x in restaurant.stars_avg_str.true_star %}
+        <p class="fa-solid fa-star text-warning" {% if small %}style="font-size:1rem;"{% endif %}></p>
+    {% endfor %}
+
+    {% for x in restaurant.stars_avg_str.half_star %}
+        <p class="position-relative">
+            <i class="fa-solid fa-star-half text-warning z-0 position-absolute d-inline" {% if small %}style="font-size:1rem;"{% endif %}></i>
+        </p>
+        <p class="fa-solid fa-star text-muted" {% if small %}style="font-size:1rem;"{% endif %}></p>
+    {% endfor %}
+
+    {% for x in restaurant.stars_avg_str.false_star %}
+        <p class="fa-solid fa-star text-muted" {% if small %}style="font-size:1rem;"{% endif %}></p>
+    {% endfor %}
+
+    <p class="score ml-2 text-dark" {% if small %}style="font-size:1rem;"{% endif %} >{{ restaurant.stars_avg_str.num }}</p>
+</div> 

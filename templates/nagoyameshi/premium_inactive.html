@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% block title %}有料会員登録{% endblock %}
+
+{% block content %}
+<h1>有料会員登録</h1>
+
+<div class="container">
+
+    <div class="w-75 mx-auto">
+    <h3>月額300円で以下の有料会員限定機能が利用可能になります。</h3>
+    <ul>
+        <li>店舗の予約機能</li>
+        <li>レビュー投稿機能</li>
+        <li>お気に入り機能機能</li>
+
+    </ul>
+
+    <form action="{% url 'nagoyameshi:checkout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary d-block mx-auto btn-lg my-4">有料会員登録<i class="fa-solid fa-gem ml-2" style="color: #74C0FC;"></i></button>
+    </form>
+
+    </div>
+</div>
+
+{% endblock %}

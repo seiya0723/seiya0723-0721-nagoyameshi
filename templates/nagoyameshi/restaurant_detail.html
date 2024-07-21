@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% load static %}
+{% block title %}{{restaurant.name}}{% endblock %}
+
+{% block content %}
+<h1 class="page_title">{{restaurant.name}}</h1>
+
+<div class="container">
+
+
+
+{# ボタン:お気に入り/レビュー/予約 #}
+<div class="w-75 mx-auto my-3 d-flex align-items-center justify-content-between">
+
+    <a href="{% url 'nagoyameshi:review_list' pk=restaurant.pk %}" class="d-block ml-5">
+        <p class="ml-2">レビュー（ {{ restaurant.count_reviews }} 件）</p>
+    
+        {% comment %} <div class="star_avg d-flex flex-direction-row align-items-center">
+            {% for x in restaurant.stars_avg_str.true_star %}
+                <p class="fa-solid fa-star text-warning"></p>
+            {% endfor %}
+
+            {% for x in restaurant.stars_avg_str.half_star %}
+                <p class="position-relative">
+                    <i class="fa-solid fa-star-half text-warning z-0 position-absolute d-inline"></i>
+                </p>
+                <p class="fa-solid fa-star text-muted"></p>
+            {% endfor %}
+
+            {% for x in restaurant.stars_avg_str.false_star %}
+                <p class="fa-solid fa-star text-muted"></p>
+            {% endfor %}
+        </div>  {% endcomment %}
+
+        {% include "nagoyameshi/partials/star_average.html" %}
+
+    </a>
+
+    <div class="item_right mr-5">
+
+        {# お気に入りボタン #}
+        <form action="" method="POST" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light btn-lg">
+                {% if user.customer_id %}
+                {# 有料会員ならお気に入り機能が利用可 #}
+                    {% if favorite %}
+                    <span class="fs-3">お気に入り</span><span class="text-danger mx-2"><i class="fa-solid fa-heart"></i></span>
+                    {% else %}
+                    <span class="fs-3">お気に入り</span><span class="text-muted mx-2"><i class="fa-solid fa-heart"></i></span>
+                    {% endif %}
+                {% else %}
+                {# 無料会員なら利用不可 #}
+                    <span class="fs-6">お気に入り</span>
+                    {% if not user.customer_id %}
+                        <i class="fa-solid fa-gem ml-1" style="color: #74C0FC;"></i>
+                    {% else %}
+                        <span class="text-muted mx-2"><i class="fa-solid fa-heart"></i></span>
+                    {% endif %}
+                {% endif %}
+                
+            </button>
+        </form>
+        
+        {# 予約ボタン #}
+        <a href="{% url 'nagoyameshi:reservation_form' pk=restaurant.pk %}" class="btn btn-primary btn-lg">
+            予約する
+            {% if not user.customer_id %}
+                <i class="fa-solid fa-gem ml-1" style="color: #74C0FC;"></i>
+            {% endif %}
+        </a>
+
+    </div>
+</div>
+
+{# 店舗紹介 #}
+<div class="mx-auto my-3 w-75 px-5">{{restaurant.description}}</div>
+
+{# 店舗画像 #}
+<section class="w-75 container carousel_container">
+<div id="restaurantDetailCarousel" class="carousel slide mx-auto">
+    {# インジケータ #}
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#restaurantDetailCarousel" data-bs-slide-to="0" class="active" aria-current="true">
+            <img src="{{ restaurant.image.url }}" class="d-block img-fluid carousel_img_btn" alt="...">
+        </button>
+        {% for photo in photos %}
+        <button type="button" data-bs-target="#restaurantDetailCarousel" data-bs-slide-to="{{ forloop.counter }}">
+            <img src="{{ photo.image.url }}" class="d-block img-fluid carousel_img_btn" alt="...">
+        </button>
+        {% endfor %}
+    </div>
+
+    {# アイテム #}
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="bg-light w-100 d-flex align-items-center">
+                <img src="{{ restaurant.image.url }}" class="d-block img-fluid mx-auto" alt="...">
+            </div>
+        </div>
+
+        {% for photo in photos %}
+        <div class="carousel-item">
+            <div class="bg-light w-100 d-flex align-items-center">
+                <img src="{{ photo.image.url }}" class="d-block img-fluid mx-auto" alt="...">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {# コントロールボタン #}
+    <button class="carousel-control-prev bg-transparent border-0" type="button" data-bs-target="#restaurantDetailCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next bg-transparent border-0" type="button" data-bs-target="#restaurantDetailCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+</section>
+
+{# 店舗情報（表）#}
+<table class="table w-75 mx-auto">
+    <tr>
+        <th>営業時間</th>
+        <td>
+            {{restaurant.opening_time}} ~ {{restaurant.closing_time}}
+        </td>
+    </tr>
+    <tr>
+        <th>電話番号</th>
+        <td>{{restaurant.phone_number}}</td>
+    </tr>
+    <tr>
+        <th>所在地</th>
+        <td>
+            {{restaurant.postal_code}}<br>
+            {{restaurant.city}}{{restaurant.street_address}}
+        </td>
+    </tr>
+    <tr>
+        <th>定休日</th>
+        <td>{% for day in restaurant.regular_closing_day.all %}{{day.name}}{% endfor %}</td>
+    </tr>
+    <tr>
+        <th>価格</th>
+        <td>
+            {{restaurant.floor_price}} ~ {{restaurant.maximum_price}} 円
+        </td>
+    </tr>
+</table>
+
+</div>
+
+{# 予約ボタン（固定） #}
+<a href="{% url 'nagoyameshi:reservation_form' pk=restaurant.pk %}" class="btn_fixed btn btn-primary btn-lg mx-auto">
+    予約する
+    {% if not user.customer_id %}
+        <i class="fa-solid fa-gem ml-1" style="color: #74C0FC;"></i>
+    {% endif %}
+</a>
+{% endblock %}

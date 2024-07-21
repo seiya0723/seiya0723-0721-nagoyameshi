@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% block title %}{{ restaurant.name }}へのレビュー{% endblock %}
+
+{% block content %}
+<h1>{{ restaurant.name }}へのレビュー一覧</h1>
+
+<div class="container">
+
+<a href="{% url 'nagoyameshi:review_form' pk=restaurant.pk %}" class="btn btn-secondary d-block mx-auto my-4 w-25">
+    <h3>
+        レビューを投稿
+        {% if not user.customer_id %}
+            <i class="fa-solid fa-gem ml-1" style="color: #74C0FC;"></i>
+        {% endif %}
+    </h3>
+</a>
+
+<div>
+{% for review in review_list %}
+    <div class="border-top border-bottom px-4 py-3 w-75 mx-auto">
+        
+        {# === 星の数 === #}
+        <div class="d-flex flex-row">
+            {# 星の数 #}
+            <h4>
+                {% for i in review.number_of_stars_str.true_star  %}
+                <i class="fa-solid fa-star text-warning"></i>
+                {% endfor %}
+                {% for i in review.number_of_stars_str.false_star  %}
+                <i class="fa-solid fa-star text-muted"></i>
+                {% endfor %}
+            </h4>
+
+            {# 来店日 #}
+            <p class="d-block align-self-center my-0 mx-3">
+                {{ review.visited_date }} 訪問
+            </p>
+        </div>
+
+
+        {# ===　コメント　=== #}
+        <p class="m-3">{{ review.comment }}</p>
+
+        {# === フッター === #}
+        <div class="review_footer d-flex flex-row w-100 align-items-center justify-content-end">
+
+            {# ユーザー名 #}
+            <p class="d-block align-self-center m-0">&mdash; &nbsp; {{ review.user_id.username }}</p>
+
+            {# 投稿日 #}
+            <p class="d-block align-self-center m-0">投稿日：{{ review.created_at }}</p>
+
+            {# 編集ボタン #}
+            {% if user.username == review.user_id.username %}
+            <a href="{% url 'nagoyameshi:review_edit' pk=review.pk %}" class="ml-3">編集</a>
+
+            {# 削除ボタン #}
+            <form action="{% url 'nagoyameshi:review_delete' pk=review.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="button" data-bs-toggle="modal" data-bs-target="#reviewDeleteConfirmModal" class="btn btn-link">削除</button>
+                            
+                {# 確認モーダル #}
+                <div class="modal fade" id="reviewDeleteConfirmModal" tabindex="-1" aria-labelledby="reviewDeleteConfirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5" id="reviewDeleteConfirmModalLabel">レビュー削除 </h2>
+                                <button type="button" class="btn text-muted btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-window-close"></i></button>
+                            </div>
+                            <div class="modal-body">
+                                レビューを削除しますか？
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                                <button type="submit" class="btn btn-primary">確定</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            {% endif %}
+
+            
+
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+</div>
+
+{% endblock %}

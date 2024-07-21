@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% load static %}
+
+{% block title %}マイページ{% endblock %}
+
+{% block content %}
+<h1>{{user.username}}さんのマイページ</h1>
+
+<div class="container">
+<div class="w-75 mx-auto">
+
+{# ========== お気に入り ========== #}
+<section class="mb-5">
+    <h3 class="mypage_section"><i class="fas fa-caret-right mr-2"></i><span>お気に入り</span></h3>
+    <div class="ml-4">
+        {% if user.customer_id %}
+        {# 有料会員ならお気に入り店舗を表示 #}
+            <p>{{ favorites.count }}件</p>
+            <ul>
+                {% if favorites %}
+                    <div class="row flex-row flex-nowrap overflow-auto">
+                        {% for favorite in favorites %}
+                            <div class="col-lg-4">
+                            <div class="card h-100" style="width: 15rem;">
+                                {# イメージは仮 #}
+                                <img src="{% static 'nagoyameshi/img/top/misokatsu.jpg' %}" class="card-img-top" alt="">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ favorite.restaurant_id.name }}</h5>
+                                    <a href="{% url "nagoyameshi:restaurant_detail" pk=favorite.restaurant_id.pk%}" class="btn btn-secondary">もっと見る</a>
+                                </div>
+                            </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>お気に入り登録した店舗はまだありません。</p>
+                {% endif %}
+            </ul>
+        {% else %}
+        {# 無料会員なら有料会員登録に誘導 #}
+            <p> <a href="{% url 'nagoyameshi:premium' %}">有料会員になる</a>と店舗をお気に入り登録することができます。</p>
+
+        {% endif %}
+    </div>
+</section>
+
+{# ========== 予約一覧 ========== #}
+<section class="mb-5">
+    <h3 class="mypage_section"><i class="fas fa-caret-right mr-2"></i><span>予約一覧</span></h3>
+    <div class="ml-4">
+    {% if user.customer_id %}
+    {# 有料会員なら予約店舗を表示 #}
+        {% if reservations %}
+        <table class="table">
+            <tr>
+                <th>店舗</th>
+                <th>予約日時</th>
+                <th>予約人数</th>
+                <th>共有事項</th>
+                <th>操作</th>
+            </tr>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{reservation.restaurant_id.name}}</td>
+                    <td>{{reservation.reservation_datetime}}</td>
+                    <td>{{reservation.number_of_persons}}</td>
+                    <td>{{reservation.comment}}</td>
+                    <td>
+                        <form action="{% url 'nagoyameshi:reservation_delete' pk=reservation.pk %}" method="POST">
+                            {% csrf_token %}
+
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#cancelConfirmModal" class="btn btn-primary btn-sm">取り消し</button>
+                          
+                            {# 確認モーダル #}
+                            <div class="modal fade" id="cancelConfirmModal" tabindex="-1" aria-labelledby="cancelConfirmModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="modal-title fs-5" id="cancelConfirmModalLabel">予約の取り消し</h2>
+                                            <button type="button" class="btn text-muted btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-window-close"></i></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            予約を取り消ししますか？
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                                            <button type="submit" class="btn btn-primary">確定</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>予約情報はまだありません。</p>
+        {% endif %}
+    
+    {% else %}
+    {# 無料会員なら有料会員登録に誘導 #}
+    <p> <a href="{% url 'nagoyameshi:premium' %}">有料会員になる</a>と店舗を予約することができます。</p>
+    </div>
+    {% endif %}
+
+</section>
+
+{# ========== 会員情報 ========== #}
+<section class="mb-5">
+    <h3 class="mypage_section"><i class="fas fa-caret-right mr-2"></i><span>会員情報</span></h3>
+    <div class="ml-4">
+    <table class="table bg-white">
+        <tr>
+            <td>ニックネーム</td>
+            <td>{{user.username}}</td>
+        </tr>
+
+        <tr>
+            <td>メールアドレス</td>
+            <td>
+                {{user.email}}
+                <span class="ml-3">
+                    {% if user.email_verified %}
+                        認証済み
+                    {% else %}
+                        <a href="{% url 'regenerate_token' %}">未認証</a>
+                    {% endif %}
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <td>氏名</td>
+            <td>
+                {% if user.last_name and user.first_name %}
+                    {{user.last_name}} {{user.first_name}}
+                {% else %}
+                    未登録
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>電話番号</td>
+            <td>
+                {% if user.phone_number %}
+                    {{user.phone_number}}
+                {% else %}
+                    未登録
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>年齢</td>
+            <td>
+                {% if user.age %}
+                    {{user.age}}
+                {% else %}
+                    未登録
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    
+
+    <a href="{% url 'user_update' %}">編集</a>
+    </div>
+</section>
+
+
+{# ========== サブスクリプション ========== #}
+<section class="mb-5">
+    <h3 class="mypage_section"><i class="fas fa-caret-right mr-2"></i><span>サブスクリプション</span><i class="fa-solid fa-gem ml-2" style="color: #74C0FC;"></i></h3>
+    <div class="ml-4">
+    <p>
+        月額300円でもっと便利に♪<br>
+        有料会員になると、以下の特典を受けることができます！
+    </p>
+    <ul>
+        <li>予約機能</li>
+        <li>レビュー投稿機能</li>
+        <li>お気に入り機能</li>
+    </ul>
+    <a href="{% url 'nagoyameshi:premium' %}" class="btn btn-primary">有料会員になる<i class="fa-solid fa-gem ml-2" style="color: #74C0FC;"></i></a>
+    </div>
+</section>
+
+
+{# ========== ログアウト ========== #}
+<section class="mb-5">
+    <form action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="button" data-bs-toggle="modal" data-bs-target="#logoutModal" class="btn btn-link d-block mx-auto"> - ログアウト - </button>
+                          
+        {# ログアウト確認モーダル #}
+        <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="logoutModalLabel">ログアウト</h2>
+                        <button type="button" class="btn text-muted btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-window-close"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        ログアウトしますか？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                        <button type="submit" class="btn btn-primary">ログアウト</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</section>
+
+</div>
+</div>
+{% endblock %}
